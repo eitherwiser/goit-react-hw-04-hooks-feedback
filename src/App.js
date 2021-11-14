@@ -1,25 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import { useState } from 'react';
+import Section from './components/section/Section';
+import Statistics from './components/statistics/Statistics';
+import FeedbackOptions from './components/feedback/FeedbackOptions';
+import Notification from './components/notification/Notification';
 
-function App() {
+const App = () => {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+
+  const options = [
+    { good: () => setGood(state => state + 1) },
+    { neutral: () => setNeutral(state => state + 1) },
+    { bad: () => setBad(state => state + 1) },
+  ];
+
+  const total = good + neutral + bad;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Section title="Please leave feedback" className="feedback">
+        <FeedbackOptions options={options} />
+      </Section>
+      <Section title="Statistics">
+        {total > 0 ? (
+          <>
+            <Statistics good={good} neutral={neutral} bad={bad} total={total} />
+          </>
+        ) : (
+          <Notification message="There are no feedbacks here yet." />
+        )}
+      </Section>
+    </>
   );
-}
+};
 
 export default App;
